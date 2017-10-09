@@ -6,10 +6,10 @@ cache:
 services:
   - docker
 before_install:
-  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "docker load -i {file}"; fi
+  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar | xargs -I {file} sh -c "docker load -i {file}"; fi
 install:
-  - docker run node echo 2333
+  - docker run --name oracle -d -e ORACLE_ALLOW_REMOTE=true -p 1521:1521 alexeiled/docker-oracle-xe-11g
 script:
   - echo 6666
 before_cache:
-  - mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+  - mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save -o $HOME/docker/$1.tar $0'
