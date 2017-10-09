@@ -1,39 +1,15 @@
 sudo: required
 language: java
 cache:
-  yarn: true
   directories:
-    - $HOME/.m2
+    - $HOME/docker
 services:
-  - mysql
-  - postgresql
   - docker
-matrix:
-  include:
-    - jdk: openjdk7
-      env: SERVER=tomcat6
-    - jdk: openjdk7
-      env: SERVER=tomcat7
-    - jdk: openjdk7
-      env: SERVER=jboss4
-    - jdk: openjdk8
-      env: SERVER=tomcat8
-    - jdk: openjdk8
-      env: SERVER=jetty9
-    - jdk: oraclejdk8
-      env: SERVER=tomcat8
-    - jdk: oraclejdk8
-      env: SERVER=jetty9
 before_install:
-  - pushd integration-test
-  - bash start-databases.sh
-  - pushd tester && yarn && popd
+  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "docker load -i {file}"; fi
 install:
-  - bash build-war.sh
-  - bash build-rasp.sh
-  - bash start-${SERVER}.sh
-  - pushd tester
+  - docker run node echo 2333
 script:
-  - travis_retry node_modules/.bin/mocha test.js -t 20000
+  - echo 6666
 before_cache:
-  - rm -rf $HOME/.m2/repository/com/fuxi
+  - mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
