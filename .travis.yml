@@ -117,5 +117,3 @@ before_script:
   - bash ./travis/$OPENRASP_LANG/before_script.sh
 script:
   - bash ./travis/$OPENRASP_LANG/script.sh
-  - make install
-  - php -m
