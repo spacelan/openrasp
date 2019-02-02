@@ -22,7 +22,7 @@ import com.baidu.openrasp.plugin.checker.CheckParameter;
 import com.baidu.openrasp.plugin.js.engine.JSContext;
 import com.baidu.openrasp.plugin.js.engine.JSContextFactory;
 import com.google.gson.Gson;
-import org.mozilla.javascript.Scriptable;
+import java.util.HashMap;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -55,10 +55,10 @@ public abstract class AbstractSSRFHook extends AbstractClassHook {
      */
     protected static void checkHttpUrl(String url, String hostName, String function) {
         JSContext cx = JSContextFactory.enterAndInitContext();
-        Scriptable params = cx.newObject(cx.getScope());
-        params.put("url", params, url);
-        params.put("hostname", params, hostName);
-        params.put("function", params, function);
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("url", url);
+        params.put("hostname", hostName);
+        params.put("function", function);
         LinkedList<String> ip = new LinkedList<String>();
         try {
             InetAddress[] addresses = InetAddress.getAllByName(hostName);
@@ -71,8 +71,7 @@ public abstract class AbstractSSRFHook extends AbstractClassHook {
             // ignore
         }
         Collections.sort(ip);
-        Scriptable array = cx.newArray(cx.getScope(), ip.toArray());
-        params.put("ip", params, array);
+        params.put("ip", ip);
         //如果在lru缓存中不进检测
         if (!HookHandler.commonLRUCache.isContainsKey(new Gson().toJson(params))) {
             HookHandler.doCheck(CheckParameter.Type.SSRF, params);

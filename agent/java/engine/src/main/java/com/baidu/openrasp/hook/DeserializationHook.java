@@ -24,7 +24,7 @@ import com.baidu.openrasp.tool.annotation.HookAnnotation;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.mozilla.javascript.Scriptable;
+import java.util.HashMap;
 
 import java.io.IOException;
 import java.io.ObjectStreamClass;
@@ -76,9 +76,8 @@ public class DeserializationHook extends AbstractClassHook {
         if (objectStreamClass != null) {
             String clazz = objectStreamClass.getName();
             if (clazz != null) {
-                JSContext cx = JSContextFactory.enterAndInitContext();
-                Scriptable params = cx.newObject(cx.getScope());
-                params.put("clazz", params, clazz);
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("clazz", clazz);
                 HookHandler.doCheck(CheckParameter.Type.DESERIALIZATION, params);
             }
         }

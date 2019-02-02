@@ -24,7 +24,7 @@ import com.baidu.openrasp.plugin.js.engine.JSContextFactory;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.mozilla.javascript.Scriptable;
+import java.util.HashMap;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -77,9 +77,8 @@ public class SocketHook extends AbstractClassHook {
         try {
             if (address != null && address instanceof InetSocketAddress) {
                 String hostName = ((InetSocketAddress) address).getHostName();
-                JSContext cx = JSContextFactory.enterAndInitContext();
-                Scriptable params = cx.newObject(cx.getScope());
-                params.put("hostname", params, hostName);
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("hostname", hostName);
                 HookHandler.doCheck(CheckParameter.Type.SSRF, params);
             }
         } catch (Exception e) {

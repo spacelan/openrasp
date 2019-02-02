@@ -25,7 +25,7 @@ import com.baidu.openrasp.tool.Reflection;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.mozilla.javascript.Scriptable;
+import java.util.HashMap;
 
 import java.io.IOException;
 
@@ -86,10 +86,9 @@ public class WebDAVCopyResourceHook extends AbstractClassHook {
                 e.printStackTrace();
             }
             if (realPath != null) {
-                JSContext cx = JSContextFactory.enterAndInitContext();
-                Scriptable params = cx.newObject(cx.getScope());
-                params.put("source", params, realPath + source);
-                params.put("dest", params, realPath + dest);
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("source", realPath + source);
+                params.put("dest", realPath + dest);
                 HookHandler.doCheck(CheckParameter.Type.WEBDAV, params);
             }
         }

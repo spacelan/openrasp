@@ -30,7 +30,7 @@ import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
-import org.mozilla.javascript.Scriptable;
+import java.util.HashMap;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -128,15 +128,13 @@ public class ProcessBuilderHook extends AbstractClassHook {
      */
     public static void checkCommand(List<String> command) {
         if (command != null && !command.isEmpty()) {
-            Scriptable params = null;
+            HashMap<String, Object> params = null;
             try {
-                JSContext cx = JSContextFactory.enterAndInitContext();
-                params = cx.newObject(cx.getScope());
-                params.put("command", params, StringUtils.join(command, " "));
+                params = new HashMap<String, Object>();
+                params.put("command", StringUtils.join(command, " "));
                 List<String> stackInfo = StackTrace.getStackTraceArray(Config.REFLECTION_STACK_START_INDEX,
                         Config.getConfig().getPluginMaxStack());
-                Scriptable stackArray = cx.newArray(cx.getScope(), stackInfo.toArray());
-                params.put("stack", params, stackArray);
+                params.put("stack", stackInfo);
             } catch (Throwable t) {
                 String message = t.getMessage();
                 int errorCode = ErrorType.HOOK_ERROR.getCode();

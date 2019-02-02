@@ -184,7 +184,7 @@ public final class HttpServletRequest extends AbstractRequest {
         Map<String, String[]> normalMap = new HashMap<String, String[]>();
         if (!canGetParameter) {
             if (!setCharacterEncodingFromConfig()) {
-                normalMap = EMPTY_PARAM;
+                normalMap = null;
             }
         } else {
             normalMap = (Map<String, String[]>) Reflection.invokeMethod(request, "getParameterMap", EMPTY_CLASS);

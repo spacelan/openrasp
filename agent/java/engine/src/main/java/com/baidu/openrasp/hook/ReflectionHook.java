@@ -26,7 +26,7 @@ import com.baidu.openrasp.tool.StackTrace;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.mozilla.javascript.Scriptable;
+import java.util.HashMap;
 
 import java.io.IOException;
 import java.util.List;
@@ -78,7 +78,7 @@ public class ReflectionHook extends AbstractClassHook {
     public static void checkReflection(Object method) {
         if (HookHandler.enableHook.get() && HookHandler.isEnableCurrThreadHook()) {
             HookHandler.disableCurrThreadHook();
-            Scriptable params = null;
+            HashMap<String, Object> params = null;
             try {
                 Class reflectClass = (Class) Reflection.invokeMethod(method, "getDeclaringClass", new Class[]{});
                 String reflectClassName = reflectClass.getName();
@@ -87,14 +87,12 @@ public class ReflectionHook extends AbstractClassHook {
                 String[] reflectMonitorMethod = Config.getConfig().getReflectionMonitorMethod();
                 for (String monitorMethod : reflectMonitorMethod) {
                     if (monitorMethod.equals(absoluteMethodName)) {
-                        JSContext cx = JSContextFactory.enterAndInitContext();
-                        params = cx.newObject(cx.getScope());
+                        params = new HashMap<String, Object>();
                         List<String> stackInfo = StackTrace.getStackTraceArray(Config.REFLECTION_STACK_START_INDEX,
                                 Config.getConfig().getPluginMaxStack());
-                        Scriptable array = cx.newArray(cx.getScope(), stackInfo.toArray());
-                        params.put("clazz", params, reflectClassName);
-                        params.put("method", params, reflectMethodName);
-                        params.put("stack", params, array);
+                        params.put("clazz", reflectClassName);
+                        params.put("method", reflectMethodName);
+                        params.put("stack", stackInfo);
                         break;
                     }
                 }

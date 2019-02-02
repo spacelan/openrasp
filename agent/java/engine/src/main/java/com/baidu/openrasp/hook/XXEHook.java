@@ -24,7 +24,7 @@ import com.baidu.openrasp.tool.annotation.HookAnnotation;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.mozilla.javascript.Scriptable;
+import java.util.HashMap;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -98,9 +98,8 @@ public class XXEHook extends AbstractClassHook {
     public static void checkXXE(String expandedSystemId) {
         if (expandedSystemId != null && !XXEHook.getLocalExpandedSystemIds().contains(expandedSystemId)) {
             XXEHook.getLocalExpandedSystemIds().add(expandedSystemId);
-            JSContext cx = JSContextFactory.enterAndInitContext();
-            Scriptable params = cx.newObject(cx.getScope());
-            params.put("entity", params, expandedSystemId);
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("entity", expandedSystemId);
             HookHandler.doCheck(CheckParameter.Type.XXE, params);
         }
     }
