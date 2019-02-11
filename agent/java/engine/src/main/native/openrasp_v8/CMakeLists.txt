@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.9.2)
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing -std=c++11 -Wno-deprecated-declarations -Wno-write-strings -Wno-deprecated-register -g")
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 find_path(V8_PATH include/v8.h)
 include_directories(${V8_PATH}/include)

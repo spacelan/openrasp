@@ -19,8 +19,6 @@ package com.baidu.openrasp.hook;
 import com.baidu.openrasp.HookHandler;
 import com.baidu.openrasp.config.Config;
 import com.baidu.openrasp.plugin.checker.CheckParameter;
-import com.baidu.openrasp.plugin.js.engine.JSContext;
-import com.baidu.openrasp.plugin.js.engine.JSContextFactory;
 import com.baidu.openrasp.tool.annotation.HookAnnotation;
 import javassist.CannotCompileException;
 import javassist.CtClass;

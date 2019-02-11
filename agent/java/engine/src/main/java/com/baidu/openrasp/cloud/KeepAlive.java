@@ -21,7 +21,6 @@ import com.baidu.openrasp.cloud.syslog.DynamicConfigAppender;
 import com.baidu.openrasp.config.Config;
 import com.baidu.openrasp.cloud.utils.CloudUtils;
 import com.baidu.openrasp.messaging.LogConfig;
-import com.baidu.openrasp.plugin.js.engine.JsPluginManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonPrimitive;
 
@@ -129,7 +128,7 @@ public class KeepAlive {
             }
         }
         if (version != null && md5 != null && pluginContext != null) {
-            JsPluginManager.updatePluginAsync(pluginContext, md5, version, deliveryTime);
+
         }
     }
 }

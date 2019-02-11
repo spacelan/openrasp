@@ -3,6 +3,7 @@ set -ev
 
 pushd agent/java
 pushd integration-test
+bash build-v8.sh
 bash build-war.sh
 bash build-rasp.sh
 bash build-rasp-install.sh

@@ -18,8 +18,6 @@ package com.baidu.openrasp.hook.sql;
 
 import com.baidu.openrasp.HookHandler;
 import com.baidu.openrasp.plugin.checker.CheckParameter;
-import com.baidu.openrasp.plugin.js.engine.JSContext;
-import com.baidu.openrasp.plugin.js.engine.JSContextFactory;
 import com.baidu.openrasp.tool.annotation.HookAnnotation;
 import com.baidu.openrasp.tool.Reflection;
 

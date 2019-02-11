@@ -35,6 +35,7 @@ public:
     getAppBasePath = env->GetMethodID(cls, "getAppBasePath", "()Ljava/lang/String;");
     getProtocol = env->GetMethodID(cls, "getProtocol", "()Ljava/lang/String;");
     getRemoteAddr = env->GetMethodID(cls, "getRemoteAddr", "()Ljava/lang/String;");
+    getJson = env->GetMethodID(cls, "getJson", "()Ljava/lang/String;");
     getBody = env->GetMethodID(cls, "getBody", "([I)[B");
     getHeader = env->GetMethodID(cls, "getHeader", "([I)[B");
     getParameter = env->GetMethodID(cls, "getParameter", "([I)[B");
@@ -48,6 +49,7 @@ public:
   jmethodID getAppBasePath;
   jmethodID getProtocol;
   jmethodID getRemoteAddr;
+  jmethodID getJson;
   jmethodID getBody;
   jmethodID getHeader;
   jmethodID getParameter;

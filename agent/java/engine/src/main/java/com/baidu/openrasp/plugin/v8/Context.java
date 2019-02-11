@@ -56,6 +56,16 @@ public class Context {
         }
     }
 
+    public String getJson() {
+        String contentType = request.getContentType();
+        byte[] body = request.getBody();
+        if (contentType.contains("application/json") && body != null) {
+            return new String(body);
+        } else {
+            return null;
+        }
+    }
+
     public byte[] getHeader(int[] size) {
         HashMap<String, String> headers = new HashMap<String, String>();
         Enumeration<String> headerNames = request.getHeaderNames();

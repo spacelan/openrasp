@@ -21,7 +21,7 @@ import com.baidu.openrasp.plugin.info.EventInfo;
 import com.baidu.openrasp.plugin.v8.Result;
 import com.baidu.openrasp.request.AbstractRequest;
 import com.baidu.openrasp.plugin.checker.CheckParameter;
-import com.baidu.openrasp.plugin.checker.CheckParameter.Type;;
+import com.baidu.openrasp.plugin.checker.CheckParameter.Type;
 
 public class V8 {
     private static final Logger PLUGIN_LOGGER = Logger.getLogger(V8.class.getPackage().getName() + ".log");
@@ -38,7 +38,7 @@ public class V8 {
             System.load(
                     "/Users/lanyuhang/Workspace/openrasp/agent/java/engine/src/main/native/build/libopenrasp_js_engine.dylib");
         } catch (UnsatisfiedLinkError e) {
-            System.load("/tmp/libv8.so");
+            System.load("/tmp/libopenrasp_js_engine.so");
         }
         JsoniterSpi.setDefaultConfig(new com.jsoniter.spi.Config.Builder().escapeUnicode(false).build());
         Base64Support.enable();
@@ -62,7 +62,7 @@ public class V8 {
             boolean new_request);
 
     public static void PluginLog(String log) {
-        PLUGIN_LOGGER.info(log);
+        PLUGIN_LOGGER.info(log.replaceAll("\n$", ""));
     }
 
     public static void AlarmLog(String log) {
@@ -144,31 +144,6 @@ public class V8 {
     }
 
     public static void main(String[] args) {
-        // Initialize();
-        // String[][] plugins = new String[1][2];
-        // plugins[0][0] = "test";
-        // plugins[0][1] = "const plugin = new RASP('test')\n"
-        // + "plugin.register('command', (params, context) => { return params.flag ===
-        // context.flag ? {action: 'block'} : {action: 'ignore'} })\n"
-        // + "plugin.log('ok')\n";
-        // CreateSnapshot("", plugins);
 
-        // V8ByteArrayOutputStream params_out = new V8ByteArrayOutputStream();
-        // Any params = Any.wrap(new Object());
-        // params.asMap().put("flag", Any.wrap(true));
-        // JsonStream.serialize(params, params_out);
-        // boolean rst = Check("command", params_out.getByteArray(), params_out.size(),
-        // params_out.getByteArray(),
-        // params_out.size());
-        // System.out.println(rst);
-
-        // V8ByteArrayOutputStream context_out = new V8ByteArrayOutputStream();
-        // Any context = Any.wrap(new Object());
-        // context.asMap().put("flag", Any.wrap(false));
-        // JsonStream.serialize(context, context_out);
-        // rst = Check("command", params_out.getByteArray(), params_out.size(),
-        // context_out.getByteArray(),
-        // context_out.size());
-        // System.out.println(rst);
     }
 }

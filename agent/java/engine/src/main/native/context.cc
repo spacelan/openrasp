@@ -37,10 +37,6 @@ inline Isolate *GetIsolate(const v8::PropertyCallbackInfo<v8::Value> &info)
 {
   return reinterpret_cast<Isolate *>(info.GetIsolate());
 }
-inline JNIEnv *GetEnv(Isolate *isolate)
-{
-  return isolate->GetData()->custom_data->env;
-}
 static void url_getter(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value> &info)
 {
   auto self = info.Holder();
@@ -212,7 +208,7 @@ static void parameter_getter(v8::Local<v8::Name> name, const v8::PropertyCallbac
   jbyteArray jparameter = (jbyteArray)custom_data->env->CallObjectMethod(custom_data->context, ctx_class.getParameter, jsize);
   if (!jparameter)
   {
-    returnValue.SetEmptyString();
+    returnValue.Set(v8::Object::New(isolate));
     return;
   }
   jint jparameter_size;
@@ -240,6 +236,11 @@ static void header_getter(v8::Local<v8::Name> name, const v8::PropertyCallbackIn
   auto custom_data = isolate->GetData()->custom_data;
   jintArray jsize = custom_data->env->NewIntArray(1);
   jbyteArray jheader = (jbyteArray)custom_data->env->CallObjectMethod(custom_data->context, ctx_class.getHeader, jsize);
+  if (!jheader)
+  {
+    returnValue.Set(v8::Object::New(isolate));
+    return;
+  }
   jint jheader_size;
   custom_data->env->GetIntArrayRegion(jsize, 0, 1, &jheader_size);
   char *raw = static_cast<char *>(custom_data->env->GetPrimitiveArrayCritical(jheader, nullptr));
@@ -294,6 +295,11 @@ static void server_getter(v8::Local<v8::Name> name, const v8::PropertyCallbackIn
   auto custom_data = isolate->GetData()->custom_data;
   jintArray jsize = custom_data->env->NewIntArray(1);
   jbyteArray jserver = (jbyteArray)custom_data->env->CallObjectMethod(custom_data->context, ctx_class.getServer, jsize);
+  if (!jserver)
+  {
+    returnValue.Set(v8::Object::New(isolate));
+    return;
+  }
   jint jserver_size;
   custom_data->env->GetIntArrayRegion(jsize, 0, 1, &jserver_size);
   char *raw = static_cast<char *>(custom_data->env->GetPrimitiveArrayCritical(jserver, nullptr));
@@ -307,6 +313,31 @@ static void server_getter(v8::Local<v8::Name> name, const v8::PropertyCallbackIn
 
 static void json_body_getter(v8::Local<v8::Name> name, const v8::PropertyCallbackInfo<v8::Value> &info)
 {
+  auto self = info.Holder();
+  auto returnValue = info.GetReturnValue();
+  auto cache = self->GetInternalField(kJsonBody);
+  if (!cache->IsUndefined())
+  {
+    returnValue.Set(cache);
+    return;
+  }
+
+  auto isolate = GetIsolate(info);
+  auto custom_data = isolate->GetData()->custom_data;
+  jstring jjson = (jstring)custom_data->env->CallObjectMethod(custom_data->context, ctx_class.getJson);
+  if (!jjson)
+  {
+    returnValue.Set(v8::Object::New(isolate));
+    return;
+  }
+  const jchar *raw = custom_data->env->GetStringCritical(jjson, nullptr);
+  const size_t len = custom_data->env->GetStringLength(jjson);
+  auto json_string = v8::String::NewFromTwoByte(isolate, raw, v8::NewStringType::kNormal, len).ToLocalChecked();
+  auto json = v8::JSON::Parse(isolate->GetCurrentContext(), json_string).ToLocalChecked();
+  custom_data->env->ReleaseStringCritical(jjson, raw);
+
+  returnValue.Set(json);
+  self->SetInternalField(kJsonBody, json);
 }
 
 v8::Local<v8::ObjectTemplate> NewRequestContextTemplate(v8::Isolate *isolate)

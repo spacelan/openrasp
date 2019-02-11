@@ -35,44 +35,43 @@ public class XssChecker extends ConfigurableChecker {
 
     @Override
     public List<EventInfo> checkParam(CheckParameter checkParameter) {
-        return new ArrayList<EventInfo>();
-        // JsonObject config = Config.getConfig().getAlgorithmConfig();
-        // String action = getActionElement(config, CONFIG_KEY_XSS_USER_INPUT);
-        // String message = null;
-        // LinkedList<EventInfo> result = new LinkedList<EventInfo>();
-        // Integer exceedCount = (Integer) checkParameter.getParam("exceed_count");
-        // @SuppressWarnings("unchecked")
-        // List<String> paramList = (ArrayList<String>) checkParameter.getParam("param_list");
-        // String content = String.valueOf(checkParameter.getParam("html_body"));
-        // if (!EventInfo.CHECK_ACTION_IGNORE.equals(action)) {
-        //     if (content != null && !paramList.isEmpty()) {
-        //         for (String param : paramList) {
-        //             if (content.contains(param)) {
-        //                 message = "请求参数" + param + "存在XSS攻击风险";
-        //             }
-        //         }
-        //     }
-        //     if (message != null) {
-        //         result.add(AttackInfo.createLocalAttackInfo(checkParameter, EventInfo.CHECK_ACTION_BLOCK, message, CONFIG_KEY_XSS_USER_INPUT));
-        //     } else {
-        //         if (exceedCount != null) {
-        //             int exceedLengthCount = getIntElement(config, CONFIG_KEY_XSS_USER_INPUT, EXCEED_LENGTH_COUNT);
-        //             if (exceedLengthCount < 0) {
-        //                 exceedLengthCount = DEFAULT_MAX_DETECTION_NUM;
-        //             }
-        //             int xssParameterLength = getIntElement(config, CONFIG_KEY_XSS_USER_INPUT, XSS_PARAMETER_LENGTH);
-        //             if (xssParameterLength < 0) {
-        //                 xssParameterLength = DEFAULT_MIN_LENGTH;
-        //             }
-        //             if (exceedCount >= exceedLengthCount) {
-        //                 message = "所有的请求参数中长度大于等于" + xssParameterLength + "并且匹配XSS正则的数量超过了" + exceedLengthCount;
-        //             }
-        //         }
-        //         if (message != null) {
-        //             result.add(AttackInfo.createLocalAttackInfo(checkParameter, EventInfo.CHECK_ACTION_BLOCK, message, CONFIG_KEY_XSS_USER_INPUT));
-        //         }
-        //     }
-        // }
-        // return result;
+        JsonObject config = Config.getConfig().getAlgorithmConfig();
+        String action = getActionElement(config, CONFIG_KEY_XSS_USER_INPUT);
+        String message = null;
+        LinkedList<EventInfo> result = new LinkedList<EventInfo>();
+        Integer exceedCount = (Integer) checkParameter.getParam("exceed_count");
+        @SuppressWarnings("unchecked")
+        List<String> paramList = (ArrayList<String>) checkParameter.getParam("param_list");
+        String content = String.valueOf(checkParameter.getParam("html_body"));
+        if (!EventInfo.CHECK_ACTION_IGNORE.equals(action)) {
+            if (content != null && !paramList.isEmpty()) {
+                for (String param : paramList) {
+                    if (content.contains(param)) {
+                        message = "请求参数" + param + "存在XSS攻击风险";
+                    }
+                }
+            }
+            if (message != null) {
+                result.add(AttackInfo.createLocalAttackInfo(checkParameter, EventInfo.CHECK_ACTION_BLOCK, message, CONFIG_KEY_XSS_USER_INPUT));
+            } else {
+                if (exceedCount != null) {
+                    int exceedLengthCount = getIntElement(config, CONFIG_KEY_XSS_USER_INPUT, EXCEED_LENGTH_COUNT);
+                    if (exceedLengthCount < 0) {
+                        exceedLengthCount = DEFAULT_MAX_DETECTION_NUM;
+                    }
+                    int xssParameterLength = getIntElement(config, CONFIG_KEY_XSS_USER_INPUT, XSS_PARAMETER_LENGTH);
+                    if (xssParameterLength < 0) {
+                        xssParameterLength = DEFAULT_MIN_LENGTH;
+                    }
+                    if (exceedCount >= exceedLengthCount) {
+                        message = "所有的请求参数中长度大于等于" + xssParameterLength + "并且匹配XSS正则的数量超过了" + exceedLengthCount;
+                    }
+                }
+                if (message != null) {
+                    result.add(AttackInfo.createLocalAttackInfo(checkParameter, EventInfo.CHECK_ACTION_BLOCK, message, CONFIG_KEY_XSS_USER_INPUT));
+                }
+            }
+        }
+        return result;
     }
 }

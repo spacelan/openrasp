@@ -20,7 +20,6 @@ import com.baidu.openrasp.cloud.utils.CloudUtils;
 import com.baidu.openrasp.hook.AbstractClassHook;
 import com.baidu.openrasp.messaging.LogConfig;
 import com.baidu.openrasp.plugin.checker.CheckerManager;
-import com.baidu.openrasp.plugin.js.engine.JsPluginManager;
 import com.baidu.openrasp.tool.FileUtil;
 import com.baidu.openrasp.tool.model.ApplicationModel;
 import com.baidu.openrasp.transformer.CustomClassTransformer;

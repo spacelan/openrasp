@@ -4,7 +4,6 @@ import com.baidu.openrasp.HookHandler;
 import com.baidu.openrasp.cloud.model.ErrorType;
 import com.baidu.openrasp.cloud.utils.CloudUtils;
 import com.baidu.openrasp.config.Config;
-import com.baidu.openrasp.plugin.js.engine.JSContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -68,9 +67,9 @@ public class ServerXss {
                     return value.getAsString();
                 }
             } catch (Exception e) {
-                String message = "Parse json failed";
-                int errorCode = ErrorType.PLUGIN_ERROR.getCode();
-                JSContext.LOGGER.warn(CloudUtils.getExceptionObject(message, errorCode), e);
+                // String message = "Parse json failed";
+                // int errorCode = ErrorType.PLUGIN_ERROR.getCode();
+                // JSContext.LOGGER.warn(CloudUtils.getExceptionObject(message, errorCode), e);
             }
         }
         return null;
@@ -85,9 +84,9 @@ public class ServerXss {
                     return value != null ? value.getAsInt() : DEFAULT_MIN_LENGTH;
                 }
             } catch (Exception e) {
-                String message = "Parse json failed";
-                int errorCode = ErrorType.PLUGIN_ERROR.getCode();
-                JSContext.LOGGER.warn(CloudUtils.getExceptionObject(message, errorCode), e);
+                // String message = "Parse json failed";
+                // int errorCode = ErrorType.PLUGIN_ERROR.getCode();
+                // JSContext.LOGGER.warn(CloudUtils.getExceptionObject(message, errorCode), e);
             }
         }
         return DEFAULT_MIN_LENGTH;

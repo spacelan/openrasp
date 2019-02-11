@@ -25,7 +25,6 @@ import com.baidu.openrasp.hook.XXEHook;
 import com.baidu.openrasp.request.DubboRequest;
 import com.baidu.openrasp.plugin.checker.CheckParameter;
 import com.baidu.openrasp.plugin.checker.CheckerManager;
-import com.baidu.openrasp.plugin.js.engine.JSContext;
 import com.baidu.openrasp.request.AbstractRequest;
 import com.baidu.openrasp.request.HttpServletRequest;
 import com.baidu.openrasp.response.HttpServletResponse;

@@ -164,7 +164,7 @@ JNIEXPORT jboolean JNICALL Java_com_baidu_openrasp_plugin_v8_V8_Check__Ljava_lan
     env->ReleasePrimitiveArrayCritical(jparams, raw, JNI_ABORT);
   }
 
-  // if (jnew_request)
+  if (jnew_request)
   {
     auto request_context = data->request_context_templ.Get(isolate)->NewInstance();
     isolate->GetData()->request_context.Reset(isolate, request_context);
